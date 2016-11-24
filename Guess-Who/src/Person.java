@@ -7,18 +7,18 @@ public class Person {
 	private String ethnicity;
 	private List<String> accessories;
 	private String eyeColour;
-	private String facialHair;
+	private boolean beard;
 	private String name;
-	
-	public Person(String gender, String hairType, String hairColour, 
-			String ethnicity, List<String> accessories, String eyeColour, String facialHair, String name) {
+
+	public Person(String gender, String hairType, String hairColour,
+			String ethnicity, List<String> accessories, String eyeColour, boolean beard, String name) {
 		this.gender = gender;
 		this.hairType = hairType;
 		this.hairColour = hairColour;
 		this.ethnicity = ethnicity;
 		this.accessories = accessories;
 		this.eyeColour = eyeColour;
-		this.facialHair = facialHair;
+		this.beard = beard;
 		this.name = name;
 	}
 
@@ -70,12 +70,12 @@ public class Person {
 		this.eyeColour = eyeColour;
 	}
 
-	public String getFacialHair() {
-		return facialHair;
+	public boolean isBearded() {
+		return beard;
 	}
 
-	public void setFacialHair(String facialHair) {
-		this.facialHair = facialHair;
+	public void setBearded(boolean beard) {
+		this.beard = beard;
 	}
 
 	public String getName() {
