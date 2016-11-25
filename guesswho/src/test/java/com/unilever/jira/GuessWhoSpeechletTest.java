@@ -265,6 +265,31 @@ public class GuessWhoSpeechletTest {
 	}
 	
 	@Test
+	public void testGetAccessoriesIntent() throws Exception {
+		Builder slotBuilder = Slot.builder();
+		Slot accessoriesSlot = slotBuilder
+				.withName("ACCESSORIES")
+				.withValue("glasses").build();
+		
+		Map<String, Slot> slots = new HashMap<String, Slot>();
+		slots.put("ACCESSORIES", accessoriesSlot);
+		intent = intentBuilder
+				.withName("GetAccessoriesIntent")
+				.withSlots(slots)
+				.build();
+		request = requestBuilder.withRequestId("request1234").withTimestamp(new Timestamp(new Date().getTime()))
+				.withIntent(intent).build();
+		session.setAttribute("person", "Queen");
+		SpeechletResponse response = speechlet.onIntent(request, session);
+		OutputSpeech speech = response.getOutputSpeech();
+		String text = "";
+		if (speech instanceof PlainTextOutputSpeech) {
+			text = ((PlainTextOutputSpeech) speech).getText();
+		}
+		log.info("onSessionEnded requestId={}, outputSpeech={}", request.getRequestId(), text);
+	}
+	
+	@Test
 	public void testNameIntent() throws Exception {
 		Builder slotBuilder = Slot.builder();
 		Slot nameSlot = slotBuilder

@@ -26,6 +26,9 @@ GetEyeColourIntent Does {PRONOUN} have {EYECOLOUR} eyes
 GetEyeColourIntent Are {PRONOUN} eyes {EYECOLOUR}
 GetEyeColourIntent Is {PRONOUN} eyes {EYECOLOUR}
 
+GetAccessoriesIntent Are {PRONOUN} wearing a {ACCESSORIES}
+GetAccessoriesIntent Are {PRONOUN} wearing {ACCESSORIES}
+
 GetNameIntent Is {PRONOUN} {NAMES}
 GetNameIntent Are {PRONOUN} {NAMES}
 
