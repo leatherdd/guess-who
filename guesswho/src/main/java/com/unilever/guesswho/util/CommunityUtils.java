@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import com.unilever.guesswho.model.Person;
 
@@ -74,5 +75,12 @@ public class CommunityUtils {
 			return null;
 		}
 	}
+	
+    public static String choosePersonAtRandom(HashMap<String, Person> community) {
+        List<Person> personList = new ArrayList<Person>(community.values());
+        int randomIndex = new Random().nextInt(community.size());
+        String chosenOne = personList.get(randomIndex).getName();
+        return chosenOne;
+    }
 
 }

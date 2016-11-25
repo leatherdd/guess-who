@@ -53,7 +53,7 @@ public class GuessWhoSpeechlet implements Speechlet {
 		log.info("onSessionStarted requestId={}, sessionId={}", request.getRequestId(), session.getSessionId());
 		
 		//TODO Make this pick a random person
-		session.setAttribute(PERSON_ATTRIBUTE, "Scarlet");		
+		session.setAttribute(PERSON_ATTRIBUTE, CommunityUtils.choosePersonAtRandom(community));		
 	}
 
 	public SpeechletResponse onLaunch(final LaunchRequest request, final Session session) throws SpeechletException {
