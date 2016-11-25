@@ -10,6 +10,7 @@
 package com.unilever.guesswho;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +30,8 @@ import com.amazon.speech.speechlet.SpeechletResponse;
 import com.amazon.speech.ui.PlainTextOutputSpeech;
 import com.amazon.speech.ui.Reprompt;
 import com.amazon.speech.ui.SimpleCard;
+import com.unilever.guesswho.model.Person;
+import com.unilever.guesswho.util.CommunityUtils;
 
 /**
  * This sample shows how to create a simple speechlet for handling speechlet
@@ -36,11 +39,14 @@ import com.amazon.speech.ui.SimpleCard;
  */
 public class GuessWhoSpeechlet implements Speechlet {
 	private static final Logger log = LoggerFactory.getLogger(GuessWhoSpeechlet.class);
+	private static final String PERSON_ATTRIBUTE = "person";
+	private static final HashMap<String, Person> community = CommunityUtils.buildCommunity();
 	
-
 	public void onSessionStarted(final SessionStartedRequest request, final Session session) throws SpeechletException {
 		log.info("onSessionStarted requestId={}, sessionId={}", request.getRequestId(), session.getSessionId());
 		
+		//TODO Make this pick a random person
+		session.setAttribute(PERSON_ATTRIBUTE, "Scarlet");		
 	}
 
 	public SpeechletResponse onLaunch(final LaunchRequest request, final Session session) throws SpeechletException {
@@ -56,6 +62,8 @@ public class GuessWhoSpeechlet implements Speechlet {
 
 		if ("AMAZON.HelpIntent".equals(intentName)) {
 			return getHelpResponse();
+		} else if ("CheatIntent".equals(intentName)) {
+			return getCheatResponse(intent,session);
 		} else {
 			throw new SpeechletException("Invalid Intent");
 		}
@@ -87,10 +95,37 @@ public class GuessWhoSpeechlet implements Speechlet {
 		return getSpeechletResponse(speechText, speechText, true);
 	}
 	
+
+	/**
+	 * Creates a {@code SpeechletResponse} for the cheat intent.
+	 *
+	 * @return SpeechletResponse spoken and visual response for the given intent
+	 */
+	private SpeechletResponse getCheatResponse(final Intent intent, final Session session) {
+		String name = (String) session.getAttribute(PERSON_ATTRIBUTE);
+		if(name != null){
+			Person person = CommunityUtils.findPersonByName(name, community);
+			if(person != null){
+				log.info(person.toString());
+				String speechText = "The person I am thinking of is " + name;
+				return getSpeechletResponse(speechText, speechText, true);				
+			}else{ 
+				String speechText = "I can't remember anything about them, try start over";
+				return getSpeechletResponse(speechText, speechText, false);
+			}
+			
+		}else{
+			String speechText = "I can't remember who I was thinking of, try start over.";
+			return getSpeechletResponse(speechText, speechText, false);
+		}
+		
+		
+	}
+	
 	private SpeechletResponse getSpeechletResponse(String speechText, String repromptText, boolean isAskResponse) {
 		// Create the Simple card content.
 		SimpleCard card = new SimpleCard();
-		card.setTitle("JIRA");
+		card.setTitle("GuessWho");
 		card.setContent(speechText);
 
 		// Create the plain text output.

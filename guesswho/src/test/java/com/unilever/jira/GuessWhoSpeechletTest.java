@@ -66,4 +66,57 @@ public class GuessWhoSpeechletTest {
 		}
 		log.info("onSessionEnded requestId={}, outputSpeech={}", request.getRequestId(), text);
 	}
+	
+
+	@Test
+	public void testSessionStart() throws Exception {
+		log.info("onSessionEnded attributes={}", session.getAttributes());
+	}
+	
+	@Test
+	public void testCheatIntent() throws Exception {
+		intent = intentBuilder.withName("CheatIntent").build();
+		request = requestBuilder.withRequestId("request1234").withTimestamp(new Timestamp(new Date().getTime()))
+				.withIntent(intent).build();
+
+		SpeechletResponse response = speechlet.onIntent(request, session);
+		OutputSpeech speech = response.getOutputSpeech();
+		String text = "";
+		if (speech instanceof PlainTextOutputSpeech) {
+			text = ((PlainTextOutputSpeech) speech).getText();
+		}
+		log.info("onSessionEnded requestId={}, outputSpeech={}", request.getRequestId(), text);
+	}
+
+	@Test
+	public void testFailedSetup() throws Exception {
+		intent = intentBuilder.withName("CheatIntent").build();
+		request = requestBuilder.withRequestId("request1234").withTimestamp(new Timestamp(new Date().getTime()))
+				.withIntent(intent).build();
+
+		session.removeAttribute("person");
+		SpeechletResponse response = speechlet.onIntent(request, session);
+		OutputSpeech speech = response.getOutputSpeech();
+		String text = "";
+		if (speech instanceof PlainTextOutputSpeech) {
+			text = ((PlainTextOutputSpeech) speech).getText();
+		}
+		log.info("onSessionEnded requestId={}, outputSpeech={}", request.getRequestId(), text);
+	}
+	
+	@Test
+	public void testInvalidName() throws Exception {
+		intent = intentBuilder.withName("CheatIntent").build();
+		request = requestBuilder.withRequestId("request1234").withTimestamp(new Timestamp(new Date().getTime()))
+				.withIntent(intent).build();
+
+		session.setAttribute("person", "IDontExist");
+		SpeechletResponse response = speechlet.onIntent(request, session);
+		OutputSpeech speech = response.getOutputSpeech();
+		String text = "";
+		if (speech instanceof PlainTextOutputSpeech) {
+			text = ((PlainTextOutputSpeech) speech).getText();
+		}
+		log.info("onSessionEnded requestId={}, outputSpeech={}", request.getRequestId(), text);
+	}
 }
