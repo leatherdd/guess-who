@@ -62,7 +62,7 @@ public class CommunityUtils {
 		community.put("Taylor", new Person("female", "curly", "blond", "white", null, "blue", false, "Taylor"));
 		community.put("David", new Person("male", "short", "brown", "white", null, "brown", true, "David"));
 		community.put("Queen",
-				new Person("female", "curly", "grey", "white", queenAccessories, "blue", false, "Queen"));
+				new Person("female", "curly", "grey", "white", queenAccessories, "blue", false, "The Queen"));
 		
 		return community;
 	}

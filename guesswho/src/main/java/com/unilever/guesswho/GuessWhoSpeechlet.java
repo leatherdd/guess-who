@@ -46,6 +46,7 @@ public class GuessWhoSpeechlet implements Speechlet {
 	private static final String HAIRTYPE_SLOT = "HAIRTYPE";
 	private static final String ETHNICITY_SLOT = "ETHNICITY";
 	private static final String EYECOLOUR_SLOT = "EYECOLOUR";
+	private static final String NAME_SLOT = "NAMES";
 	
 	public void onSessionStarted(final SessionStartedRequest request, final Session session) throws SpeechletException {
 		log.info("onSessionStarted requestId={}, sessionId={}", request.getRequestId(), session.getSessionId());
@@ -81,6 +82,8 @@ public class GuessWhoSpeechlet implements Speechlet {
 			return getFacialHairResponse(intent,session);
 		} else if ("GetEyeColourIntent".equals(intentName)) {
 			return getEyeColourResponse(intent,session);
+		} else if ("GetNameIntent".equals(intentName)) {
+			return getNameResponse(intent,session);
 		} else {
 			throw new SpeechletException("Invalid Intent");
 		}
@@ -358,6 +361,47 @@ public class GuessWhoSpeechlet implements Speechlet {
 						speechText = "Yes, their eye colour is " + eyeColourSlot.getValue();
 					}else{
 						speechText = "No, their eye colour is not " + eyeColourSlot.getValue();
+					}
+					
+					return getSpeechletResponse(speechText, speechText, true);
+				} else {
+					String speechText = "I can't remember anything about them, try start over";
+					return getSpeechletResponse(speechText, speechText, false);
+				}
+
+			} else {
+				String speechText = "I can't remember who I was thinking of, try start over.";
+				return getSpeechletResponse(speechText, speechText, false);
+			}
+		} else {
+			String speechText = "Something went wrong, try ask again";
+			return getSpeechletResponse(speechText, speechText, true);
+		}
+	}
+	
+	/**
+	 * Creates a {@code SpeechletResponse} for the name intent.
+	 *
+	 * @return SpeechletResponse spoken and visual response for the given intent
+	 */
+	private SpeechletResponse getNameResponse(final Intent intent, final Session session) {
+
+		Map<String, Slot> slots = intent.getSlots();
+
+		// Get the slot from the list of slots.
+		Slot nameSlot = slots.get(NAME_SLOT);
+		String name = (String) session.getAttribute(PERSON_ATTRIBUTE);
+		if (nameSlot != null) {
+			if (name != null) {
+				Person person = CommunityUtils.findPersonByName(name, community);
+				if (person != null) {
+					log.info(person.toString());
+					log.info(nameSlot.getValue());
+					String speechText = "";
+					if(person.getName().equalsIgnoreCase(nameSlot.getValue())){
+						speechText = "Yes, they are " + nameSlot.getValue();
+					}else{
+						speechText = "No, they are not " + nameSlot.getValue();
 					}
 					
 					return getSpeechletResponse(speechText, speechText, true);
