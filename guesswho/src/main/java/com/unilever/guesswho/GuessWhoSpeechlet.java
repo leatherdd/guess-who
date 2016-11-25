@@ -45,6 +45,7 @@ public class GuessWhoSpeechlet implements Speechlet {
 	private static final String HAIRCOLOUR_SLOT = "HAIRCOLOUR";
 	private static final String HAIRTYPE_SLOT = "HAIRTYPE";
 	private static final String ETHNICITY_SLOT = "ETHNICITY";
+	private static final String EYECOLOUR_SLOT = "EYECOLOUR";
 	
 	public void onSessionStarted(final SessionStartedRequest request, final Session session) throws SpeechletException {
 		log.info("onSessionStarted requestId={}, sessionId={}", request.getRequestId(), session.getSessionId());
@@ -78,6 +79,8 @@ public class GuessWhoSpeechlet implements Speechlet {
 			return getEthnicityResponse(intent,session);
 		} else if ("GetFacialHairIntent".equals(intentName)) {
 			return getFacialHairResponse(intent,session);
+		} else if ("GetEyeColourIntent".equals(intentName)) {
+			return getEyeColourResponse(intent,session);
 		} else {
 			throw new SpeechletException("Invalid Intent");
 		}
@@ -143,7 +146,7 @@ public class GuessWhoSpeechlet implements Speechlet {
 
 		Map<String, Slot> slots = intent.getSlots();
 
-		// Get the users slot from the list of slots.
+		// Get the slot from the list of slots.
 		Slot genderSlot = slots.get(GENDER_SLOT);
 		String name = (String) session.getAttribute(PERSON_ATTRIBUTE);
 		if (genderSlot != null) {
@@ -185,7 +188,7 @@ public class GuessWhoSpeechlet implements Speechlet {
 
 		Map<String, Slot> slots = intent.getSlots();
 
-		// Get the users slot from the list of slots.
+		// Get the slot from the list of slots.
 		Slot hairColourSlot = slots.get(HAIRCOLOUR_SLOT);
 		String name = (String) session.getAttribute(PERSON_ATTRIBUTE);
 		if (hairColourSlot != null) {
@@ -226,7 +229,7 @@ public class GuessWhoSpeechlet implements Speechlet {
 
 		Map<String, Slot> slots = intent.getSlots();
 
-		// Get the users slot from the list of slots.
+		// Get the slot from the list of slots.
 		Slot hairTypeSlot = slots.get(HAIRTYPE_SLOT);
 		String name = (String) session.getAttribute(PERSON_ATTRIBUTE);
 		if (hairTypeSlot != null) {
@@ -267,7 +270,7 @@ public class GuessWhoSpeechlet implements Speechlet {
 
 		Map<String, Slot> slots = intent.getSlots();
 
-		// Get the users slot from the list of slots.
+		// Get the slot from the list of slots.
 		Slot ethnicitySlot = slots.get(ETHNICITY_SLOT);
 		String name = (String) session.getAttribute(PERSON_ATTRIBUTE);
 		if (ethnicitySlot != null) {
@@ -329,6 +332,47 @@ public class GuessWhoSpeechlet implements Speechlet {
 		} else {
 			String speechText = "I can't remember who I was thinking of, try start over.";
 			return getSpeechletResponse(speechText, speechText, false);
+		}
+	}
+	
+	/**
+	 * Creates a {@code SpeechletResponse} for the eye colour intent.
+	 *
+	 * @return SpeechletResponse spoken and visual response for the given intent
+	 */
+	private SpeechletResponse getEyeColourResponse(final Intent intent, final Session session) {
+
+		Map<String, Slot> slots = intent.getSlots();
+
+		// Get the slot from the list of slots.
+		Slot eyeColourSlot = slots.get(EYECOLOUR_SLOT);
+		String name = (String) session.getAttribute(PERSON_ATTRIBUTE);
+		if (eyeColourSlot != null) {
+			if (name != null) {
+				Person person = CommunityUtils.findPersonByName(name, community);
+				if (person != null) {
+					log.info(person.toString());
+					log.info(eyeColourSlot.getValue());
+					String speechText = "";
+					if(person.getEyeColour().equalsIgnoreCase(eyeColourSlot.getValue())){
+						speechText = "Yes, their eye colour is " + eyeColourSlot.getValue();
+					}else{
+						speechText = "No, their eye colour is not " + eyeColourSlot.getValue();
+					}
+					
+					return getSpeechletResponse(speechText, speechText, true);
+				} else {
+					String speechText = "I can't remember anything about them, try start over";
+					return getSpeechletResponse(speechText, speechText, false);
+				}
+
+			} else {
+				String speechText = "I can't remember who I was thinking of, try start over.";
+				return getSpeechletResponse(speechText, speechText, false);
+			}
+		} else {
+			String speechText = "Something went wrong, try ask again";
+			return getSpeechletResponse(speechText, speechText, true);
 		}
 	}
 	

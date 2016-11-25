@@ -239,4 +239,29 @@ public class GuessWhoSpeechletTest {
 		log.info("onSessionEnded requestId={}, outputSpeech={}", request.getRequestId(), text);
 	}
 	
+	@Test
+	public void testGetEyeColourIntent() throws Exception {
+		Builder slotBuilder = Slot.builder();
+		Slot eyeColourSlot = slotBuilder
+				.withName("EYECOLOUR")
+				.withValue("brown").build();
+		
+		Map<String, Slot> slots = new HashMap<String, Slot>();
+		slots.put("EYECOLOUR", eyeColourSlot);
+		intent = intentBuilder
+				.withName("GetEyeColourIntent")
+				.withSlots(slots)
+				.build();
+		request = requestBuilder.withRequestId("request1234").withTimestamp(new Timestamp(new Date().getTime()))
+				.withIntent(intent).build();
+
+		SpeechletResponse response = speechlet.onIntent(request, session);
+		OutputSpeech speech = response.getOutputSpeech();
+		String text = "";
+		if (speech instanceof PlainTextOutputSpeech) {
+			text = ((PlainTextOutputSpeech) speech).getText();
+		}
+		log.info("onSessionEnded requestId={}, outputSpeech={}", request.getRequestId(), text);
+	}
+	
 }
