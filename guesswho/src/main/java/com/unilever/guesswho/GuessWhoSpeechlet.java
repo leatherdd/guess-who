@@ -42,6 +42,7 @@ public class GuessWhoSpeechlet implements Speechlet {
 	private static final String PERSON_ATTRIBUTE = "person";
 	private static final HashMap<String, Person> community = CommunityUtils.buildCommunity();
 	private static final String GENDER_SLOT = "GENDER";
+	private static final String HAIRCOLOUR_SLOT = "HAIRCOLOUR";
 	
 	public void onSessionStarted(final SessionStartedRequest request, final Session session) throws SpeechletException {
 		log.info("onSessionStarted requestId={}, sessionId={}", request.getRequestId(), session.getSessionId());
@@ -67,6 +68,8 @@ public class GuessWhoSpeechlet implements Speechlet {
 			return getCheatResponse(intent,session);
 		} else if ("GetGenderIntent".equals(intentName)) {
 			return getGenderResponse(intent,session);
+		} else if ("GetHairColourIntent".equals(intentName)) {
+			return getHairColourResponse(intent,session);
 		} else {
 			throw new SpeechletException("Invalid Intent");
 		}
@@ -124,7 +127,7 @@ public class GuessWhoSpeechlet implements Speechlet {
 	}
 	
 	/**
-	 * Creates a {@code SpeechletResponse} for the cheat intent.
+	 * Creates a {@code SpeechletResponse} for the gender intent.
 	 *
 	 * @return SpeechletResponse spoken and visual response for the given intent
 	 */
@@ -146,6 +149,48 @@ public class GuessWhoSpeechlet implements Speechlet {
 						speechText = "Yes, their gender is " + genderSlot.getValue();
 					}else{
 						speechText = "No, their gender is not " + genderSlot.getValue();
+					}
+					
+					return getSpeechletResponse(speechText, speechText, true);
+				} else {
+					String speechText = "I can't remember anything about them, try start over";
+					return getSpeechletResponse(speechText, speechText, false);
+				}
+
+			} else {
+				String speechText = "I can't remember who I was thinking of, try start over.";
+				return getSpeechletResponse(speechText, speechText, false);
+			}
+		} else {
+			String speechText = "Something went wrong, try ask again";
+			return getSpeechletResponse(speechText, speechText, true);
+		}
+	}
+	
+	
+	/**
+	 * Creates a {@code SpeechletResponse} for the hair colour intent.
+	 *
+	 * @return SpeechletResponse spoken and visual response for the given intent
+	 */
+	private SpeechletResponse getHairColourResponse(final Intent intent, final Session session) {
+
+		Map<String, Slot> slots = intent.getSlots();
+
+		// Get the users slot from the list of slots.
+		Slot hairColourSlot = slots.get(HAIRCOLOUR_SLOT);
+		String name = (String) session.getAttribute(PERSON_ATTRIBUTE);
+		if (hairColourSlot != null) {
+			if (name != null) {
+				Person person = CommunityUtils.findPersonByName(name, community);
+				if (person != null) {
+					log.info(person.toString());
+					log.info(hairColourSlot.getValue());
+					String speechText = "";
+					if(person.getHairColour().equalsIgnoreCase(hairColourSlot.getValue())){
+						speechText = "Yes, their hair colour is " + hairColourSlot.getValue();
+					}else{
+						speechText = "No, their hair colour is not " + hairColourSlot.getValue();
 					}
 					
 					return getSpeechletResponse(speechText, speechText, true);

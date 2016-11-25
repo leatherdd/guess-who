@@ -144,4 +144,30 @@ public class GuessWhoSpeechletTest {
 		}
 		log.info("onSessionEnded requestId={}, outputSpeech={}", request.getRequestId(), text);
 	}
+	
+	@Test
+	public void testGetHairColourIntent() throws Exception {
+		Builder slotBuilder = Slot.builder();
+		Slot hairColourSlot = slotBuilder
+				.withName("HAIRCOLOUR")
+				.withValue("ginger").build();
+		
+		Map<String, Slot> slots = new HashMap<String, Slot>();
+		slots.put("HAIRCOLOUR", hairColourSlot);
+		intent = intentBuilder
+				.withName("GetHairColourIntent")
+				.withSlots(slots)
+				.build();
+		request = requestBuilder.withRequestId("request1234").withTimestamp(new Timestamp(new Date().getTime()))
+				.withIntent(intent).build();
+
+		SpeechletResponse response = speechlet.onIntent(request, session);
+		OutputSpeech speech = response.getOutputSpeech();
+		String text = "";
+		if (speech instanceof PlainTextOutputSpeech) {
+			text = ((PlainTextOutputSpeech) speech).getText();
+		}
+		log.info("onSessionEnded requestId={}, outputSpeech={}", request.getRequestId(), text);
+	}
+	
 }
