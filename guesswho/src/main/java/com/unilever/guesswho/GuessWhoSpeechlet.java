@@ -76,6 +76,8 @@ public class GuessWhoSpeechlet implements Speechlet {
 			return getHairTypeResponse(intent,session);
 		} else if ("GetEthnicityIntent".equals(intentName)) {
 			return getEthnicityResponse(intent,session);
+		} else if ("GetFacialHairIntent".equals(intentName)) {
+			return getFacialHairResponse(intent,session);
 		} else {
 			throw new SpeechletException("Invalid Intent");
 		}
@@ -294,6 +296,39 @@ public class GuessWhoSpeechlet implements Speechlet {
 		} else {
 			String speechText = "Something went wrong, try ask again";
 			return getSpeechletResponse(speechText, speechText, true);
+		}
+	}
+	
+	/**
+	 * Creates a {@code SpeechletResponse} for the facial hair intent.
+	 *
+	 * @return SpeechletResponse spoken and visual response for the given intent
+	 */
+	private SpeechletResponse getFacialHairResponse(final Intent intent, final Session session) {
+
+		//TODO: Supports only beard right  now
+		
+		String name = (String) session.getAttribute(PERSON_ATTRIBUTE);
+		if (name != null) {
+			Person person = CommunityUtils.findPersonByName(name, community);
+			if (person != null) {
+				log.info(person.toString());
+				String speechText = "";
+				if (person.isBearded()) {
+					speechText = "Yes, they have a beard";
+				} else {
+					speechText = "No, they do not have a beard";
+				}
+
+				return getSpeechletResponse(speechText, speechText, true);
+			} else {
+				String speechText = "I can't remember anything about them, try start over";
+				return getSpeechletResponse(speechText, speechText, false);
+			}
+
+		} else {
+			String speechText = "I can't remember who I was thinking of, try start over.";
+			return getSpeechletResponse(speechText, speechText, false);
 		}
 	}
 	
