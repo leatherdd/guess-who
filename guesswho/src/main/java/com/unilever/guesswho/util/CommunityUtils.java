@@ -36,7 +36,7 @@ public class CommunityUtils {
 		community.put("Beyonce", new Person("female", "curly", "brown", "black", null, "brown", false, "Beyonce"));
 		community.put("Russell",
 				new Person("male", "long", "brown", "white", sunglassesAccessories, "brown", true, "Russell"));
-		community.put("Ron", new Person("male", "short", "ginger", "white", null, "blue", false, "Ron"));
+		community.put("Rupert", new Person("male", "short", "ginger", "white", null, "blue", false, "Rupert"));
 		community.put("Donald",
 				new Person("male", "short", "blond", "white", hatAccessories, "brown", false, "Donald"));
 		community.put("Ed", new Person("male", "short", "ginger", "white", null, "blue", true, "Ed"));
