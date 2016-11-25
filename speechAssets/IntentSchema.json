@@ -1,0 +1,67 @@
+{
+	"intents": [{
+		"intent": "AMAZON.HelpIntent"
+	}, {
+		"intent": "CheatIntent"
+	}, {
+		"intent": "GetGenderIntent",
+		"slots": [{
+			"name": "GENDER",
+			"type": "GENDER"
+		}, {
+			"name": "PRONOUN",
+			"type": "PRONOUN"
+		}]
+	}, {
+		"intent": "GetNameIntent",
+		"slots": [{
+			"name": "NAMES",
+			"type": "NAMES"
+		}, {
+			"name": "PRONOUN",
+			"type": "PRONOUN"
+		}]
+	}, {
+		"intent": "GetEyeColourIntent",
+		"slots": [{
+			"name": "EYECOLOUR",
+			"type": "EYECOLOUR"
+		}, {
+			"name": "PRONOUN",
+			"type": "PRONOUN"
+		}]
+	}, {
+		"intent": "GetEthnicityIntent",
+		"slots": [{
+			"name": "ETHNICITY",
+			"type": "ETHNICITY"
+		}, {
+			"name": "PRONOUN",
+			"type": "PRONOUN"
+		}]
+	}, {
+		"intent": "GetHairColourIntent",
+		"slots": [{
+			"name": "HAIRCOLOUR",
+			"type": "HAIRCOLOUR"
+		}, {
+			"name": "PRONOUN",
+			"type": "PRONOUN"
+		}]
+	}, {
+		"intent": "GetHairTypeIntent",
+		"slots": [{
+			"name": "HAIRTYPE",
+			"type": "HAIRTYPE"
+		}, {
+			"name": "PRONOUN",
+			"type": "PRONOUN"
+		}]
+	}, {
+		"intent": "GetFacialHairIntent",
+		"slots": [{
+			"name": "PRONOUN",
+			"type": "PRONOUN"
+		}]
+	}]
+}

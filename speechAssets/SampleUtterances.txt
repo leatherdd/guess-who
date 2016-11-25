@@ -1,0 +1,32 @@
+AMAZON.HelpIntent help
+
+GetGenderIntent Are {PRONOUN} {GENDER}
+GetGenderIntent Is {PRONOUN} {GENDER}
+
+GetHairColourIntent Do {PRONOUN} have {HAIRCOLOUR} hair
+GetHairColourIntent Does {PRONOUN} have {HAIRCOLOUR} hair
+GetHairColourIntent Are {PRONOUN} {HAIRCOLOUR}
+GetHairColourIntent Is {PRONOUN} hair {HAIRCOLOUR}
+
+GetHairTypeIntent Does {PRONOUN} have {HAIRTYPE} hair
+GetHairTypeIntent Do {PRONOUN} have {HAIRTYPE} hair
+GetHairTypeIntent Is {PRONOUN} hair {HAIRTYPE}
+GetHairTypeIntent Are {PRONOUN} {HAIRTYPE}
+
+GetEthnicityIntent Are {PRONOUN} {ETHNICITY}
+GetEthnicityIntent Is {PRONOUN} {ETHNICITY}
+
+GetFacialHairIntent Do {PRONOUN} have a beard
+GetFacialHairIntent Does {PRONOUN} have a beard
+GetFacialHairIntent Do {PRONOUN} have facial hair
+GetFacialHairIntent Does {PRONOUN} have facial hair
+
+GetEyeColourIntent Do {PRONOUN} have {EYECOLOUR} eyes
+GetEyeColourIntent Does {PRONOUN} have {EYECOLOUR} eyes 
+GetEyeColourIntent Are {PRONOUN} eyes {EYECOLOUR}
+GetEyeColourIntent Is {PRONOUN} eyes {EYECOLOUR}
+
+GetNameIntent Is {PRONOUN} {NAMES}
+GetNameIntent Are {PRONOUN} {NAMES}
+
+CheatIntent reveal yourself
