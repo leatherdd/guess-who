@@ -119,4 +119,29 @@ public class GuessWhoSpeechletTest {
 		}
 		log.info("onSessionEnded requestId={}, outputSpeech={}", request.getRequestId(), text);
 	}
+	
+	@Test
+	public void testGetGenderIntent() throws Exception {
+		Builder slotBuilder = Slot.builder();
+		Slot genderSlot = slotBuilder
+				.withName("GENDER")
+				.withValue("female").build();
+		
+		Map<String, Slot> slots = new HashMap<String, Slot>();
+		slots.put("GENDER", genderSlot);
+		intent = intentBuilder
+				.withName("GetGenderIntent")
+				.withSlots(slots)
+				.build();
+		request = requestBuilder.withRequestId("request1234").withTimestamp(new Timestamp(new Date().getTime()))
+				.withIntent(intent).build();
+
+		SpeechletResponse response = speechlet.onIntent(request, session);
+		OutputSpeech speech = response.getOutputSpeech();
+		String text = "";
+		if (speech instanceof PlainTextOutputSpeech) {
+			text = ((PlainTextOutputSpeech) speech).getText();
+		}
+		log.info("onSessionEnded requestId={}, outputSpeech={}", request.getRequestId(), text);
+	}
 }

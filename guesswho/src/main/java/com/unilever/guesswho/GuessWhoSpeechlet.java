@@ -41,6 +41,7 @@ public class GuessWhoSpeechlet implements Speechlet {
 	private static final Logger log = LoggerFactory.getLogger(GuessWhoSpeechlet.class);
 	private static final String PERSON_ATTRIBUTE = "person";
 	private static final HashMap<String, Person> community = CommunityUtils.buildCommunity();
+	private static final String GENDER_SLOT = "GENDER";
 	
 	public void onSessionStarted(final SessionStartedRequest request, final Session session) throws SpeechletException {
 		log.info("onSessionStarted requestId={}, sessionId={}", request.getRequestId(), session.getSessionId());
@@ -64,6 +65,8 @@ public class GuessWhoSpeechlet implements Speechlet {
 			return getHelpResponse();
 		} else if ("CheatIntent".equals(intentName)) {
 			return getCheatResponse(intent,session);
+		} else if ("GetGenderIntent".equals(intentName)) {
+			return getGenderResponse(intent,session);
 		} else {
 			throw new SpeechletException("Invalid Intent");
 		}
@@ -117,9 +120,48 @@ public class GuessWhoSpeechlet implements Speechlet {
 		}else{
 			String speechText = "I can't remember who I was thinking of, try start over.";
 			return getSpeechletResponse(speechText, speechText, false);
+		}	
+	}
+	
+	/**
+	 * Creates a {@code SpeechletResponse} for the cheat intent.
+	 *
+	 * @return SpeechletResponse spoken and visual response for the given intent
+	 */
+	private SpeechletResponse getGenderResponse(final Intent intent, final Session session) {
+
+		Map<String, Slot> slots = intent.getSlots();
+
+		// Get the users slot from the list of slots.
+		Slot genderSlot = slots.get(GENDER_SLOT);
+		String name = (String) session.getAttribute(PERSON_ATTRIBUTE);
+		if (genderSlot != null) {
+			if (name != null) {
+				Person person = CommunityUtils.findPersonByName(name, community);
+				if (person != null) {
+					log.info(person.toString());
+					log.info(genderSlot.getValue());
+					String speechText = "";
+					if(person.getGender().equalsIgnoreCase(genderSlot.getValue())){
+						speechText = "Yes, their gender is " + genderSlot.getValue();
+					}else{
+						speechText = "No, their gender is not " + genderSlot.getValue();
+					}
+					
+					return getSpeechletResponse(speechText, speechText, true);
+				} else {
+					String speechText = "I can't remember anything about them, try start over";
+					return getSpeechletResponse(speechText, speechText, false);
+				}
+
+			} else {
+				String speechText = "I can't remember who I was thinking of, try start over.";
+				return getSpeechletResponse(speechText, speechText, false);
+			}
+		} else {
+			String speechText = "Something went wrong, try ask again";
+			return getSpeechletResponse(speechText, speechText, true);
 		}
-		
-		
 	}
 	
 	private SpeechletResponse getSpeechletResponse(String speechText, String repromptText, boolean isAskResponse) {
